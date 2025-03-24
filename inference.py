@@ -26,8 +26,10 @@ def main():
     parser.add_argument('--weight_path', type=str, default='results/exp1/model', help='Model path')
     parser.add_argument('--weight_file', type=str, default='best_model.pth')
     parser.add_argument('--device', type=str, default='cuda', help='Gpu device')
-    parser.add_argument('--save_wavs_path', type=str, default='../pred_wav')
-    parser.add_argument('--base_path', type=str, default='data/VCTK_DEMAND', help='Data base path')
+    parser.add_argument('--save_wavs_path', type=str, default='pred_wav')
+    # parser.add_argument('--base_path', type=str, default='data/VCTK_DEMAND', help='Data base path')
+    parser.add_argument('--test_clean_path', type=str, default='data/VCTK_DEMAND/test/clean/', help='Clean folder path')
+    parser.add_argument('--test_noisy_path', type=str, default='data/VCTK_DEMAND/test/noisy/', help='Noisy folder path')
 
     parser.add_argument('--seed', type=int, default=1)
     parser.add_argument('--causal', type=bool, default=False)
@@ -35,14 +37,17 @@ def main():
     
     args = parser.parse_args()
 
-    test_noisy_path = f'{args.base_path}/test/noisy/'
-    test_clean_path = f'{args.base_path}/test/clean/'
+    # test_clean_path = f'{args.base_path}/test/clean/'
+    # test_noisy_path = f'{args.base_path}/test/noisy/'
+    # test_noisy_path = f'{args.base_path}/wav_noisy/'
+    # test_clean_path = f'{args.base_path}/wav_clean/'
 
     model_weight_path = Path(args.weight_path)
     model_weight_path.mkdir(parents=True, exist_ok=True)
 
-    data_paths = {'test_noisy':test_noisy_path, 'test_clean':test_clean_path, 'model_weight':model_weight_path}
+    data_paths = {'test_noisy':args.test_noisy_path, 'test_clean':args.test_clean_path, 'model_weight':model_weight_path}
 
+    # 在這做 inference
     tester = Tester(args, data_paths)
     tester.test()
 
@@ -112,9 +117,13 @@ class Tester:
                 enh_wav = transform_spec_to_wav(torch.expm1(enh_mag), noise_phase, signal_length=clean_wav.size(1)).detach().cpu().numpy().squeeze()
 
                 enhanced_name=opj(self.args.weight_path, self.args.save_wavs_path, f'{name}{suffix}')                
-                sf.write(enhanced_name, enh_wav, fs)
+                sf.write(enhanced_name, enh_wav, fs, subtype='FLOAT')
                 test_enhanced_name.append(enhanced_name)
-
+        print("---"*20)
+        print(clean_path)
+        print()
+        print(test_enhanced_name)
+        print("---"*20)
         # Calculate True PESQ
         test_PESQ = get_pesq_parallel(clean_path, test_enhanced_name, norm=False)
         test_CSIG = get_csig_parallel(clean_path, test_enhanced_name, norm=False)
