@@ -6,7 +6,6 @@ import numpy as np
 import torch
 from pathlib import Path
 from os.path import join as opj
-from train import Trainer
 warnings.filterwarnings('ignore')
 
 def setup_seed(seed):
@@ -25,7 +24,7 @@ def main():
     parser.add_argument('--exp_name', type=str, default='exp1', help='name of the experiment')
     parser.add_argument('--device', type=str, default='cuda', help='Gpu device')
     parser.add_argument('--output_path', type=str, default='results', help='Model and Log path')
-    parser.add_argument('--base_path', type=str, default='data/VCTK_DEMAND', help='Data base path')
+    # parser.add_argument('--base_path', type=str, default='data/VCTK_DEMAND', help='Data base path')
 
     parser.add_argument('--target_metric', type=str, default='pesq', help='pesq or csig or cbak or covl')
     parser.add_argument('--epochs', type=int, default=750)
@@ -41,15 +40,27 @@ def main():
     parser.add_argument('--num_workers', type=int, default=1)
     parser.add_argument('--val_speaker', type=str, nargs='*', default=[], help='select validation speaker (e.g., p226, p227, ..., etc)')
     
+    parser.add_argument('--train_noisy_path', type=str, default='data/VCTK_DEMAND/train/noisy/')
+    parser.add_argument('--train_clean_path', type=str, default='data/VCTK_DEMAND/train/clean/')
+    # parser.add_argument('--train_enhan_path', type=str, default='pesq')
+    parser.add_argument('--test_noisy_path', type=str, default='data/VCTK_DEMAND/test/noisy/')
+    parser.add_argument('--test_clean_path', type=str, default='data/VCTK_DEMAND/test/clean/')
+    parser.add_argument('--is_finetune', type=int, default=0)
+    
     args = parser.parse_args()
     setup_seed(args.seed)
     
-    train_noisy_path = f'{args.base_path}/train/noisy/'
-    train_clean_path = f'{args.base_path}/train/clean/'
+    # train_noisy_path = f'{args.base_path}/train/noisy/'
+    # train_clean_path = f'{args.base_path}/train/clean/'
     train_enhan_path = f'{args.output_path}/{args.exp_name}/enhanced_wavs/'
-
-    test_noisy_path = f'{args.base_path}/test/noisy/'
-    test_clean_path = f'{args.base_path}/test/clean/'
+    # test_noisy_path = f'{args.base_path}/test/noisy/'
+    # test_clean_path = f'{args.base_path}/test/clean/'
+    
+    train_noisy_path = args.train_noisy_path
+    train_clean_path = args.train_clean_path
+    # train_enhan_path = args.train_enhan_path
+    test_noisy_path = args.test_noisy_path
+    test_clean_path = args.test_clean_path
 
     model_output_path = Path(args.output_path, args.exp_name, 'model')
     log_output_path = Path(args.output_path, args.exp_name)
@@ -61,8 +72,12 @@ def main():
                   'test_noisy':test_noisy_path, 'test_clean':test_clean_path,
                   'model_output':model_output_path, 'log_output':log_output_path}
 
-
-    trainer = Trainer(args, data_paths)
+    if args.is_finetune == 1:
+        from train_finetune import Trainer_finetune
+        trainer = Trainer_finetune(args, data_paths)
+    else:
+        from train import Trainer
+        trainer = Trainer(args, data_paths)
     trainer.train()
     shutil.rmtree(opj(args.output_path, args.exp_name, 'tmp'))
     shutil.rmtree(train_enhan_path)

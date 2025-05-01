@@ -1,0 +1,23 @@
+{
+  "exp_name": "exp20250318-finetune",
+  "device": "cuda",
+  "output_path": "results",
+  "target_metric": "pesq",
+  "epochs": 3,
+  "batch_size": 16,
+  "num_of_sampling": 100,
+  "num_of_val_sample": 824,
+  "hist_portion": 0.2,
+  "lr": 0.0005,
+  "eval_per_epoch": 1,
+  "skip_val_epoch": 1,
+  "seed": 1,
+  "causal": false,
+  "num_workers": 1,
+  "val_speaker": [],
+  "train_noisy_path": "/disk4/chocho/_datas/THCHS-30-train-noisy/train-noisy/",
+  "train_clean_path": "/disk4/chocho/_datas/THCHS-30/data_thchs30/train/",
+  "test_noisy_path": "/disk4/chocho/_datas/THCHS-30/test-data1/test-noisy1/",
+  "test_clean_path": "/disk4/chocho/_datas/THCHS-30/test-data1/test-clean1/cafe",
+  "is_finetune": 1
+}

@@ -1,0 +1,29 @@
+Train MetricGAN+-pesq
+Train set:10000, Valid set:0, Test set:10
+Model parameters:1.896M
+Total training time:0.62Minute
+Train MetricGAN+-pesq
+Train set:10000, Valid set:0, Test set:10
+Model parameters:1.896M
+Total training time:0.64Minute
+Train MetricGAN+-pesq
+Train set:10000, Valid set:0, Test set:10
+Model parameters:1.896M
+Total training time:1.02Minute
+Train MetricGAN+-pesq
+Train set:10000, Valid set:0, Test set:10
+Model parameters:1.896M
+Train MetricGAN+-pesq
+Train set:10000, Valid set:0, Test set:0
+Model parameters:1.896M
+Epoch:1 | Test PESQ:nan | Test CSIG:nan | Test CBAK:nan | Test COVL:nan
+Epoch:2 | Test PESQ:nan | Test CSIG:nan | Test CBAK:nan | Test COVL:nan
+Epoch:3 | Test PESQ:nan | Test CSIG:nan | Test CBAK:nan | Test COVL:nan
+Total training time:1.02Minute
+Train MetricGAN+-pesq
+Train set:10000, Valid set:0, Test set:0
+Model parameters:1.896M
+Epoch:1 | Test PESQ:nan | Test CSIG:nan | Test CBAK:nan | Test COVL:nan
+Epoch:2 | Test PESQ:nan | Test CSIG:nan | Test CBAK:nan | Test COVL:nan
+Epoch:3 | Test PESQ:nan | Test CSIG:nan | Test CBAK:nan | Test COVL:nan
+Total training time:1.02Minute
